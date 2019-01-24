@@ -22,46 +22,38 @@ exports.create = (text, callback) => {
 
 exports.readAll = (callback) => {
   // look through data path
-    // parse through the file to exclude .txt
-    // utilize the callback to return an object
+    // slice through the file to exclude .txt
     // push the object in the empty array
+    // utilize the callback to return an object
+   
   fs.readdir(this.dataDir, (err, file) => {
     var data = [] 
-    
     for(var i =0; i < file.length; i++){
       var obj = {};
-      var id = file[i].slice(0,5); //00001
+      var id = file[i].slice(0,5);
       obj['id'] = id;
-      // console.log(id);
       obj['text'] = id;
       data.push(obj)
     }
       if (err) {
         throw ('error');
       } else {
-        //  console.log(data);
         callback(null, data);
       }
-    
-
   });
-
-
-
-
-  // var data = _.map(items, (text, id) => {
-  //   return { id, text };
-  // });
-  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  // set a variable for the file path (id)
+  //
+  var filePath = `${this.dataDir}/${id}.txt` 
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (!data) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      callback(null, { id, text: data});
+    }
+  })
 };
 
 exports.update = (id, text, callback) => {
