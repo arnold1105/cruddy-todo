@@ -18,17 +18,41 @@ exports.create = (text, callback) => {
       }
     });
   });
-
-  // var id = counter.getNextUniqueId();
-  // items[id] = text;
-  // callback(null, { id, text });
 };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  // look through data path
+    // parse through the file to exclude .txt
+    // utilize the callback to return an object
+    // push the object in the empty array
+  fs.readdir(this.dataDir, (err, file) => {
+    var data = [] 
+    
+    for(var i =0; i < file.length; i++){
+      var obj = {};
+      var id = file[i].slice(0,5); //00001
+      obj['id'] = id;
+      // console.log(id);
+      obj['text'] = id;
+      data.push(obj)
+    }
+      if (err) {
+        throw ('error');
+      } else {
+        //  console.log(data);
+        callback(null, data);
+      }
+    
+
   });
-  callback(null, data);
+
+
+
+
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
