@@ -45,7 +45,6 @@ exports.readAll = (callback) => {
 
 exports.readOne = (id, callback) => {
   // set a variable for the file path (id)
-  //
   var filePath = `${this.dataDir}/${id}.txt` 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (!data) {
@@ -57,11 +56,11 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
+  //check to seff if the fileName exist
   //given id, read the file to retrieve the dat 
   //replace the data to the given text
   //writefile
   var fileName = `${this.dataDir}/${id}.txt`
-  //if fileName exist??
   if(fs.existsSync(fileName)){
   fs.writeFile(fileName, text, (err) => {
     if (err) {
@@ -76,13 +75,21 @@ exports.update = (id, text, callback) => {
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
+  // create a variable for the file name
+  // check to see if the file name exist
+    // if true unlink path with callback of err and success
+    // else call back new error
+  var fileName = `${this.dataDir}/${id}.txt` 
+  if(fs.existsSync(fileName)){
+    fs.unlink(fileName, (err) => {
+      if(err){
+        callback(err);
+      } else {
+        callback(fileName);
+      }
+    });
   } else {
-    callback();
+    callback(new Error(`No item with id: ${id}`));
   }
 };
 
